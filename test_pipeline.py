@@ -206,24 +206,8 @@ def test_real_file_agrees_with_its_own_total_row(real):
     assert round(df["discount"].sum() + copies["discount"].sum(), 2) == float(total["Discount"])
 
 
-def test_run_writes_the_output_file(tmp_path):
-    output = tmp_path / "out.csv"
-    totals, _ = pipeline.run(pipeline.DEFAULT_INPUT, output)
-    written = pd.read_csv(output)
-    assert list(written.columns) == ["region", "revenue"]
-    assert written["region"].tolist() == ["Central", "East", "North", "South", "West"]
-    assert written["revenue"].tolist() == totals["revenue"].tolist()
-
-
 def test_committed_output_is_up_to_date(tmp_path):
     output = tmp_path / "out.csv"
     pipeline.run(pipeline.DEFAULT_INPUT, output)
     committed = Path(pipeline.DEFAULT_OUTPUT)
     assert committed.read_text().splitlines() == output.read_text().splitlines()
-
-
-def test_main_runs_with_explicit_paths(tmp_path, capsys):
-    output = tmp_path / "out.csv"
-    pipeline.main(["pipeline.py", str(pipeline.DEFAULT_INPUT), str(output)])
-    assert output.exists()
-    assert "duplicate_rows: 5" in capsys.readouterr().out

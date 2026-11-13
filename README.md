@@ -22,8 +22,9 @@ pytest                           # runs all tests
 - The example in the task shows the new column as `price_total` although
   `"total"` was passed. I treat it as a typo: the column is named exactly
   `new_column`.
-- `new_column` and the labels used in `role` must consist only of ASCII
-  letters and underscores. Other columns of `df` are not checked.
+- `new_column` and every column label of `df` must consist only of ASCII
+  letters and underscores, also the columns that `role` does not use. I read
+  "any column label" in the task literally.
 - A role is `label (operator label)*` with `+`, `-`, `*` and optional
   whitespace. Numbers and parentheses are not supported. `*` is done before
   `+` and `-`.

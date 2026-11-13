@@ -23,9 +23,10 @@ def add_virtual_column(df: pandas.DataFrame, role: str, new_column: str) -> pand
     ``+``, ``-`` and ``*`` (``*`` binds tighter than ``+`` and ``-``), for
     example ``"quantity * price - discount"``.
 
-    An empty DataFrame is returned when the input is incorrect: a label that
-    is not made only of letters and underscores, a malformed role, or a role
-    that uses a column which is missing, ambiguous or not numeric.
+    An empty DataFrame is returned when the input is incorrect: ``new_column``
+    or any column label of ``df`` that is not made only of letters and
+    underscores, a malformed role, or a role that uses a column which is
+    missing, ambiguous or not numeric.
     The input DataFrame is never modified.
     """
     empty = pandas.DataFrame([])
@@ -33,6 +34,8 @@ def add_virtual_column(df: pandas.DataFrame, role: str, new_column: str) -> pand
     if not isinstance(df, pandas.DataFrame):
         return empty
     if not _is_valid_label(new_column):
+        return empty
+    if not all(_is_valid_label(label) for label in df.columns):
         return empty
     if not isinstance(role, str) or _ROLE_RE.fullmatch(role) is None:
         return empty
